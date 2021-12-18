@@ -48,7 +48,7 @@ export default {
 ```
 
 ## Scoped Slots
-![scoped](/images/scoped-slot.png) 
+![scoped](./images/scoped-slot.png) 
 
 **todo-list**
 

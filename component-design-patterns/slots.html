@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        .blog-container {
+            width: 100vw;
+            height: 100vh;
+            background-color: antiquewhite;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script>
+
+    const { createApp } = Vue;
+
+    const Layout = {
+        template: `
+        <div class="blog-container">
+            <header>
+                <slot name="header"></slot>
+            </header>
+            <main>
+                <slot></slot>
+            </main>
+            <footer>
+                <slot name="footer"></slot>
+            </footer>
+        </div>
+        `,
+    }
+
+    const App = {
+        template: `
+        <Layout>
+            <template v-slot:header>
+                <h1>My Blog Title</h1>
+            </template>
+            <template v-slot:default>
+                <p>Main body content</p>
+            </template>
+            <template v-slot:footer>
+                <p>Footer content</p>
+            </template>
+        </Layout>
+        `,
+        components: [Layout],
+    }
+
+    const app = createApp(App)
+    app.component("Layout", Layout)
+
+    app.mount("#app")
+</script>
+
+</html>

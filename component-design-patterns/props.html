@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script>
+    const { createApp, reactive, ref, computed, watch } = Vue;
+
+    const Poster = {
+        template: `
+        <div>
+            <img :src="image"/>
+            <div><text> {{length}} minutes </text></div>
+            
+        </div>
+        `,
+        props: {
+            image: {
+                type: String,
+                default: '/images/placeholder.png',
+                validator: propValue => {
+                    const hasImagesDirectory = propValue.indexOf('/images/') > -1
+                    const isPNG = propValue.endsWith('.png')
+                    const isJPEG = propValue.endsWith('.jpeg') || propValue.endsWith('.jpg')
+                    const hasValidExtension = isPNG || isJPEG
+
+                    return hasImagesDirectory && hasValidExtension
+                }
+            },
+            length: {
+                type: [Number, String],
+                default: 90
+            }
+        }
+    }
+
+    const App = {
+        template: `<Poster :image="img"></Poster>`,
+        components: [Poster],
+        data() {
+            return {
+                img: "/images/logo.png"
+            }
+        }
+    }
+    const app = createApp(App)
+    app.component("Poster", Poster)
+    app.mount("#app")
+</script>
+
+</html>

@@ -4,5 +4,6 @@ https://www.vuemastery.com/courses
 |  Dir                               | Course                                                                 |
 | ----                               | ----                                                                   |
 |[vue3-reactivity](./vue3-reactivity)|[Vue 3 Reactivity](https://www.vuemastery.com/courses/vue-3-reactivity/)|
+|[component-design-patterns](./component-design-patterns)|[Component Design Patterns](https://www.vuemastery.com/courses/component-design-patterns/)|
 
 

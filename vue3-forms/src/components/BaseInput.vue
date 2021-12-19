@@ -1,10 +1,12 @@
 <template>
   <label :for="uuid" v-if="label">{{ label }}</label>
   <input
-    v-bind="$attrs"
+    v-bind="{
+      ...$attrs,
+      onInput: updateValue
+    }"
     :value="modelValue"
     :placeholder="label"
-    @input="$emit('update:modelValue', updateValue)"
     class="field"
     :id="uuid"
   >

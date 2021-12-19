@@ -1,8 +1,8 @@
 <template>
   <input
+    v-bind="{ ...$attrs, onChange: updateValue }"
     type="checkbox"
     :checked="modelValue"
-    @change="$emit('update:modelValue', updateValue)"
     class="field"
     :id="uuid"
   />

@@ -3,8 +3,7 @@
       type="radio"
       :checked="modelValue === value"
       :value="value"
-      v-bind="$attrs"
-      @change="$emit('update:modelValue', updateValue)"
+      v-bind="{ ...$attrs, onChange: updateValue }"
       :id="uuid"
     />
   <label v-if="label" :for="uuid">{{ label }}</label>

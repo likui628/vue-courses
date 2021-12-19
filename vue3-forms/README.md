@@ -61,3 +61,50 @@ The ```legend``` HTML element represents a caption for the content of its parent
 
 ## Validating Vue 3 Forms
 
+[VeeValidate](https://github.com/logaretm/vee-validate)
+>Form Validation for Vue.js
+```js
+export default {
+  setup () {
+    const schema = object({
+      email: string().required().email(),
+      password: string().required().min(8)
+    })
+
+    const { handleSubmit, errors } = useForm({
+      validationSchema: schema
+    })
+
+    const { value: email } = useField('email')
+    const { value: password } = useField('password')
+
+    const onSubmit = handleSubmit(values => {
+      console.log('submit', values)
+    })
+
+    return {
+      email,
+      password,
+      errors,
+      onSubmit
+    }
+  }
+}
+
+```
+
+
+[YUP](https://github.com/jquense/yup)
+>Yup is a JavaScript schema builder for value parsing and validation. 
+
+```js
+import * as yup from 'yup';
+
+let schema = yup.object().shape({
+  name: yup.string().required(),
+  age: yup.number().required().positive().integer(),
+  email: yup.string().email(),
+  website: yup.string().url()
+});
+```
+

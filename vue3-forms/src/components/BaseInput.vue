@@ -4,14 +4,22 @@
     v-bind="$attrs"
     :value="modelValue"
     :placeholder="label"
-    @input="$emit('update:modelValue', $event.target.value)"
+    @input="$emit('update:modelValue', updateValue)"
     class="field"
     :id="uuid"
   >
+  <BaseErrorMessage
+    v-if="error"
+    :id="`${uuid}-error`"
+  >
+    {{ error }}
+  </BaseErrorMessage>
 </template>
 
 <script>
 import UniqueID from '../features/UniqueID'
+import SetupFormComponent from '../features/SetupFormComponent'
+
 export default {
   props: {
     label: {
@@ -21,12 +29,19 @@ export default {
     modelValue: {
       type: [String, Number],
       default: ''
+    },
+    error: {
+      type: String,
+      default: ''
     }
   },
-  setup () {
+  setup (props, context) {
     const uuid = UniqueID().getID()
+    const { updateValue } = SetupFormComponent(props, context)
+
     return {
-      uuid
+      uuid,
+      updateValue
     }
   }
 }

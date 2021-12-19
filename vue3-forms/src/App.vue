@@ -1,16 +1,12 @@
 <template>
   <div id="app">
-    <SimpleForm />
+    <p>
+        <router-link to="/">Login</router-link>
+        <router-link to="/form">Form</router-link>
+    </p>
+    <router-view></router-view>
   </div>
 </template>
-
-<script>
-import SimpleForm from '@/views/SimpleForm'
-
-export default {
-  components: { SimpleForm }
-}
-</script>
 
 <style>
 html {
@@ -39,6 +35,7 @@ a {
   color: #39b982;
   font-weight: 600;
   background-color: transparent;
+  padding-right: 20px;
 }
 img {
   border-style: none;
@@ -198,6 +195,7 @@ textarea {
 [type="text"],
 [type="number"],
 [type="search"],
+[type="email"],
 [type="password"] {
   height: 52px;
   width: 100%;

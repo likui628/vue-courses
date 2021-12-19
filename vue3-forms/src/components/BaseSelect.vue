@@ -5,7 +5,7 @@
     :value="modelValue"
     v-bind="{
       ...$attrs,
-      onChange: ($event) => { $emit('update:modelValue', $event.target.value) }
+      onChange: ($event) => { $emit('update:modelValue', updateValue) }
     }"
     :id="uuid"
   >
@@ -16,10 +16,17 @@
       :selected="option === modelValue"
     >{{ option }}</option>
   </select>
+  <BaseErrorMessage
+    v-if="error"
+    :id="`${uuid}-error`"
+  >
+    {{ error }}
+  </BaseErrorMessage>
 </template>
 
 <script>
 import UniqueID from '../features/UniqueID'
+import SetupFormComponent from '../features/SetupFormComponent'
 
 export default {
   props: {
@@ -34,12 +41,19 @@ export default {
     options: {
       type: Array,
       required: true
+    },
+    error: {
+      type: String,
+      default: ''
     }
   },
-  setup () {
+  setup (props, context) {
     const uuid = UniqueID().getID()
+    const { updateValue } = SetupFormComponent(props, context)
+
     return {
-      uuid
+      uuid,
+      updateValue
     }
   }
 }

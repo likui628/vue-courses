@@ -64,7 +64,12 @@
         </div>
       </fieldset>
 
-      <button type="submit">Submit</button>
+      <BaseButton
+        type="submit"
+        class="-fill-gradient"
+      >
+      Submit
+      </BaseButton>
     </form>
 
     <pre>{{ event }}</pre>

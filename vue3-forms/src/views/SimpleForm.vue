@@ -1,26 +1,29 @@
 <template>
   <div>
     <h1>Create an event</h1>
-    <form @submit.prevent="sendForm">
+    <form @submit.prevent="onSubmit">
       <BaseSelect
         :options="categories"
-        v-model="event.category"
+        v-model="category"
         label="Select a category"
+        :error="errors.category"
       />
 
       <fieldset>
         <legend>Name & describe your event</legend>
 
         <BaseInput
-          v-model="event.title"
+          v-model="title"
           label="Title"
           type="text"
+          :error="errors.title"
         />
 
         <BaseInput
-          v-model="event.description"
+          v-model="description"
           label="Description"
           type="text"
+          :error="errors.description"
         />
       </fieldset>
 
@@ -28,9 +31,10 @@
         <legend>Where is your event?</legend>
 
         <BaseInput
-          v-model="event.location"
+          v-model="location"
           label="Location"
           type="text"
+          :error="errors.location"
         />
       </fieldset>
 
@@ -40,9 +44,10 @@
         <p>Are pets allowed?</p>
         <div>
           <BaseRadioGroup
-            v-model="event.pets"
+            v-model="pets"
             name="pets"
             :options="petOptions"
+            :error="errors.pets"
           />
         </div>
       </fieldset>
@@ -51,15 +56,17 @@
         <legend>Extras</legend>
         <div>
           <BaseCheckbox
-            v-model="event.extras.catering"
+            v-model="catering"
             label="Catering"
+            :error="errors.catering"
           />
         </div>
 
         <div>
           <BaseCheckbox
-            v-model="event.extras.music"
+            v-model="music"
             label="Live music"
+            :error="errors.music"
           />
         </div>
       </fieldset>
@@ -71,13 +78,12 @@
       Submit
       </BaseButton>
     </form>
-
-    <pre>{{ event }}</pre>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import { useField, useForm } from 'vee-validate'
+import { object as yupObject, string, number, boolean } from 'yup'
 
 export default {
   data () {
@@ -91,32 +97,54 @@ export default {
         'food',
         'community'
       ],
-      event: {
-        category: '',
-        title: '',
-        description: '',
-        location: '',
-        pets: 1,
-        extras: {
-          catering: false,
-          music: false
-        }
-      },
       petOptions: [
         { label: 'Yes', value: 1 },
         { label: 'No', value: 0 }
       ]
     }
   },
-  methods: {
-    sendForm (e) {
-      axios.post('https://my-json-server.typicode.com/Code-Pop/Vue-3-Forms/events', this.event)
-        .then(function (response) {
-          console.log('Response', response)
-        })
-        .catch(function (err) {
-          console.log('Error', err)
-        })
+  setup () {
+    const schema = yupObject({
+      category: string().required(),
+      title: string().required('A cool title is required').min(3),
+      description: string().required(),
+      location: string(),
+      pets: number(),
+      catering: boolean(),
+      music: boolean()
+    })
+
+    const { handleSubmit, errors } = useForm({
+      validationSchema: schema,
+      initialValues: {
+        pets: 1,
+        catering: false,
+        music: false
+      }
+    })
+
+    const { value: category } = useField('category')
+    const { value: title } = useField('title')
+    const { value: description } = useField('description')
+    const { value: location } = useField('location')
+    const { value: pets } = useField('pets')
+    const { value: catering } = useField('catering')
+    const { value: music } = useField('music')
+
+    const onSubmit = handleSubmit(values => {
+      console.log('submit', values)
+    })
+
+    return {
+      category,
+      title,
+      description,
+      location,
+      pets,
+      catering,
+      music,
+      onSubmit,
+      errors
     }
   }
 }

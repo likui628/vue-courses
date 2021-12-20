@@ -7,3 +7,7 @@ explorations
 TODOs.md
 *.log
 .idea
+.nuxt
+nuxt.d.ts
+.output
+.env

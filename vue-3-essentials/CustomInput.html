@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Input</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id='app'></div>
+</body>
+<script>
+    /*
+    When used on a component, v-model instead does this:
+        <custom-input
+        :model-value="searchText"
+        @update:model-value="searchText = $event"
+        />
+    */
+    const { createApp, ref } = Vue
+    const App = {
+        template: `
+        <div>
+            <p>{{value}}</p>
+            <custom-input v-model="value"/>
+        </div>
+        `,
+        setup() {
+            const value = ref("ninja")
+            return { value };
+        }
+    }
+    createApp(App).component('custom-input', {
+        props: ['modelValue'],
+        emits: ['update:modelValue'],
+        template: `
+            <input
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+            >
+        `
+    }).mount('#app')
+</script>
+
+</html>

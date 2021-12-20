@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        html,
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            font-family: Avenir, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #2c3e50;
+        }
+
+        .profile-card {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px;
+            box-sizing: border-box;
+            border-radius: 20px;
+            background-color: #fff;
+            overflow: hidden;
+            position: relative;
+            min-height: 150px;
+        }
+
+        .profile-card .profile-image__img {
+            width: 10%;
+            height: auto;
+            border-radius: 50%;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+        }
+
+        .profile-card .profile-image__border {
+            width: calc(10% + 20px);
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .profile-info {
+            width: 85%;
+            float: right;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        .profile-info span {
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 3px;
+        }
+
+        .profile-info h3 {
+            margin: 10px 0;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: #222;
+        }
+
+        .profile-info p {
+            line-height: 140%;
+            color: #666;
+        }
+
+        .profile-image-skeleton img {
+            width: 100%;
+            padding-top: 100%;
+        }
+
+        .profile-info-skeleton span {
+            width: 100%;
+            height: 16px;
+            display: block;
+        }
+
+        .profile-info-skeleton h3 {
+            width: 250px;
+            height: 24px;
+        }
+
+        .profile-info-skeleton p {
+            width: 80%;
+            height: 16px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id='app'></div>
+</body>
+<script>
+    //https://learnvue.co/2020/04/vue-skeleton-loading-screen-using-suspense-components-daily-vue-4/
+    const loadUserData = async () => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    name: 'Matt Maribojoc',
+                    pic:
+                        'https://cdn-images-1.medium.com/fit/c/100/100/2*EcZb9cndrhTF7_d74dv2Fg.png',
+                    bio:
+                        'I run a VueJS community over at https://learnvue.co, develop web sites, and post whatever I find cool on the Internet.',
+                })
+            }, 2000)
+        })
+    }
+    const { createApp, ref, defineComponent } = Vue
+
+
+    const ProfileCard = defineComponent({
+        template: `
+            <div class="profile-card">
+                <div class="profile-image">
+                <img :src="userData.pic" />
+                </div>
+                <div class="profile-info">
+                <span> Written By </span>
+                <h3>{{ userData.name }}</h3>
+                <p>{{ userData.bio }}</p>
+                </div>
+            </div>
+        `,
+        async setup() {
+            const userData = ref(await loadUserData())
+
+            return {
+                userData,
+            }
+        }
+    })
+
+    const ProfileCardSkeleton = defineComponent({
+        template: `
+            <div class="profile-card">
+                <div class="profile-image-skeleton">
+                <img />
+                </div>
+                <div class="profile-info-skeleton">
+                <span />
+                <h3 />
+                <p />
+                </div>
+            </div>
+        `
+    })
+
+    const App = {
+        components: { ProfileCard, ProfileCardSkeleton },
+        template: `
+            <Suspense>
+                <template #default>
+                <ProfileCard />
+                </template>
+                <template #fallback>
+                <ProfileCardSkeleton />
+                </template>
+            </Suspense>
+            `
+    }
+
+    createApp(App).mount('#app')
+</script>
+
+</html>

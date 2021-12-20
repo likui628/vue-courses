@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Effect</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id='app'></div>
+</body>
+<script>
+    function fetchData(val) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                return resolve(Math.floor(Math.random() * val))
+            }, 500)
+        })
+    }
+
+    function performAsyncOperation() {
+        let finished = false;
+        let cancel = () => finished = true;
+
+        const promise = new Promise((resolve, reject) => {
+            const id = setInterval(() => {
+                resolve();
+            }, 1000);
+
+            cancel = () => {
+                if (finished) {
+                    return;
+                }
+                console.log('OK, I\'ll stopoing.');
+                clearInterval(id);
+                reject();
+            };
+
+            if (finished) {
+                cancel();
+            }
+
+        }).then((resolvedValue) => {
+            finished = true;
+            return resolvedValue;
+        }).catch((err) => {
+            finished = true;
+            return err;
+        });
+        return { promise, cancel };
+    }
+    const { createApp, ref, watchEffect } = Vue
+    const App = {
+        template: `
+        <div>
+            <p>count:{{count}}</p>
+            <p>data:{{data}}</p>
+            <p>
+                <button @click="count++">add</button>
+                <button @click="stopEffect">stopEffect</button>
+            </p>
+        </div>
+            `,
+        setup() {
+            const count = ref(0)
+            const data = ref(null)
+            //stop watch
+            const stopEffect = watchEffect(async (onInvalidate) => {
+                const task = performAsyncOperation();
+
+                //the effect is about to re-run
+                //the watcher is stopped 
+                onInvalidate(
+                    () => {
+                        // cleanup function
+                        // invalidate previously pending async operation
+                        task.cancel();
+                    },
+                    {
+                        flush: 'pre',//pre(default) post sync 
+                    })
+
+                // onInvalidate before Promise resolves
+                data.value = await fetchData(count.value)
+
+            })
+            return { count, stopEffect, data };
+        }
+    }
+    createApp(App).mount('#app')
+</script>
+
+</html>

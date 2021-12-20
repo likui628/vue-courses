@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reactivity Fundamentals</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+  </body>
+
+  <script>
+    const { createApp, ref, reactive, toRefs, readonly } = Vue;
+    //reactive for js object
+    //ref for primitive value
+    const App = {
+      template: `
+      <div>
+        <h2>ref</h2>
+        <p><span>{{ count }}</span></p>
+        <p><button @click="count ++">Increment count</button></p>
+        <p><button @click="nested.count.value ++">Nested Increment count</button></p>
+
+        <h2>reactive</h2>
+        <p>{{obj.obja}}</p>
+        <p><button @click="obj.obja ++">Increment count</button></p>
+        <h3>destructuring using toRefs</h3>
+        <p>{{obja}}</p>
+        <p><button @click="obja ++">Increment count</button></p>
+        
+        <h2>readonly</h2>
+        <p>{{copy.obja}}</p>
+        <p>Set operation on key "obja" failed: target is readonly</p>
+        <p><button @click="copy.obja ++">Increment count</button></p>
+      </div>
+            `,
+      setup() {
+        const count = ref(0);
+        //nested:shallow unwraps the inner value
+        const nested = { count };
+        const obj = reactive({ obja: 1, objb: 2 });
+
+        const copy = readonly(obj);
+
+        //toRefs:convert our reactive object to a set of refs
+        return { count, nested, obj, ...toRefs(obj), copy };
+      },
+    };
+    createApp(App).mount("#app");
+  </script>
+</html>

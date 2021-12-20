@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scoped Slots</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+  </body>
+  <script>
+    const { createApp, ref } = Vue;
+
+    const app = createApp({
+      template: `
+        <div>
+           <h3>Scoped Slots</h3>
+           <todo-list>
+                <template v-slot:default="slotProps">
+                    <i class="fas fa-check"></i>
+                    <span class="green">{{ slotProps.item }}</span>
+                </template >
+            </todo-list>
+            <h3>Named Slots Shorthand</h3>
+            <todo-list>
+                <template #default="slotProps">
+                    <i class="fas fa-check"></i>
+                    <span class="green">{{ slotProps.item }}</span>
+                </template >
+            </todo-list>
+            <h3>Destructuring Slot Props</h3>
+            <todo-list>
+                <template v-slot:default="{item}">
+                    <i class="fas fa-check"></i>
+                    <span class="green">{{ item }}</span>
+                </template >
+            </todo-list>
+        </div>
+        `,
+    });
+
+    app.component("todo-list", {
+      data() {
+        return {
+          items: ["Feed a cat", "Buy milk"],
+        };
+      },
+      template: `
+        <ul>
+            <li v-for="(item, index) in items">
+                <slot :item="item"></slot>
+            </li>
+        </ul>
+         `,
+    });
+
+    app.mount("#app");
+  </script>
+</html>

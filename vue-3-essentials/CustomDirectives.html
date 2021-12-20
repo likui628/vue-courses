@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Input</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vuex@4"></script>
+</head>
+
+<body>
+    <div id='app'></div>
+</body>
+<script>
+    const { createApp, ref } = Vue
+    const { createStore } = Vuex
+
+    const store = createStore({
+        state() {
+            return {
+                permission: { add: 0, edit: 1, del: 0 }
+            }
+        },
+    })
+
+    const App = {
+        template: `
+        <div>
+            <button v-has="'add'">Add</button>
+            <button v-has="'edit'">Edit</button>
+            <button v-has="'del'">Del</button>
+        </div>
+        `,
+        setup() {
+            const value = ref("ninja")
+            return { value };
+        }
+    }
+    const app = createApp(App);
+    app.directive('has', {
+        mounted(el, binding, vnode, prevVnode) {
+            if (!store.state.permission[binding.value]) {
+                el.remove()
+            }
+        }
+    })
+    app.use(store)
+    app.mount('#app')
+</script>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id='app'></div>
+</body>
+<script>
+    const { createApp, ref, reactive } = Vue
+    const App = {
+        template: `
+        <div class="home">
+            <h1>Refs</h1>
+            <h2>ninjaOne</h2>
+            <p>{{ ninjaOne.name }} - {{ ninjaOne.age }} - {{ refName }}</p>
+            <button @click="handleNinjaOne">click me</button>
+
+            <h1>Reactive</h1>
+            <h2>ninjaTwo</h2>
+            <p>{{ ninjaTwo.name }} - {{ ninjaTwo.age }}</p>
+            <button @click="handleNinjaTwo">click me</button>
+        </div>
+            `,
+        setup() {
+            //ref
+            const ninjaOne = ref({ name: "mario", age: 30 });
+            const refName = ref("mario");
+            const handleNinjaOne = () => {
+                ninjaOne.value.age++;
+                refName.value = "mario_1";
+            };
+
+            //reactive
+            const ninjaTwo = reactive({ name: "luigi", age: 35 });
+            //reactivity.esm-bundler.js?a1e9:695 value cannot be made reactive
+            //const reaciveName = reactive("luigi");
+            const handleNinjaTwo = () => {
+                ninjaTwo.age++;
+            };
+
+            return {
+                ninjaOne,
+                refName,
+                handleNinjaOne,
+                ninjaTwo,
+                handleNinjaTwo,
+            };
+        }
+    }
+    createApp(App).mount('#app')
+</script>
+
+</html>

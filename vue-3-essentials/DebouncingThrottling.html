@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DebouncingThrottling</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
+</head>
+
+<body>
+    <div id='app'></div>
+</body>
+<script>
+    const { createApp, ref } = Vue
+    const App = {
+        template: `
+        <div>
+            <h2>Option</h2>
+            <p>{{count}}</p>
+            <button @click="onClick">Add</button>
+
+            <h2>Composition</h2>
+            <p>{{num}}</p>
+            <button @click="handleClick">Add</button>
+
+            <h2>reused component</h2>
+            <p>
+                <save-button title="button_1">button_1</save-button>
+            </p>
+            <p>
+                <save-button title="button_2">button_2</save-button>
+            </p>
+        </div>
+            `,
+        data() {
+            return { count: 0 }
+        },
+        methods: {
+            onClick: _.debounce(function () {
+                this.count++
+            }, 500)
+        },
+        setup() {
+            const num = ref(0)
+            const handleClick = _.debounce(() => {
+                num.value++;
+            }, 500)
+            return { num, handleClick };
+        }
+    }
+
+    createApp(App).component('save-button', {
+        template: `
+        <button @click="debouncedClick">
+            <slot></slot>
+        </button>
+        `,
+        props: {
+            title: String,
+        },
+        created() {
+            // Debouncing with Lodash
+            this.debouncedClick = _.debounce(this.click, 500)
+        },
+        unmounted() {
+            // Cancel the timer when the component is removed
+            this.debouncedClick.cancel()
+        },
+        methods: {
+            click() {
+                // ... respond to click ...
+                console.log(`${this.title} clicked`)
+            }
+        },
+    }).mount('#app')
+</script>
+
+</html>

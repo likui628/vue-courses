@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Render Function</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+  </body>
+  <script>
+    const { createApp, h } = Vue;
+
+    const Anchoredheading = {
+      render() {
+        return h(
+          "h" + this.level, // tag name
+          {}, // props/attributes
+          this.$slots.default() // array of children
+        );
+      },
+      props: {
+        level: {
+          type: Number,
+          required: true,
+        },
+      },
+    };
+
+    const App = {
+      components: {
+        Anchoredheading,
+      },
+      template: `
+        <div>
+            <Anchoredheading :level="1">H1</Anchoredheading>
+            <Anchoredheading :level="2">H2</Anchoredheading>
+            <Anchoredheading :level="3">H3</Anchoredheading>
+        </div>
+            `,
+    };
+
+    const app = createApp(App);
+
+    app.mount("#app");
+  </script>
+</html>

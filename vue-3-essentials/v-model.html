@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>v-model</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+  </body>
+  <script>
+    const { createApp, ref } = Vue;
+    const app = createApp({
+      template: `
+        <div>
+            <p>Multiple v-model bindings</p>
+            <p><my-component v-model:model.capitalize="value" v-model:description="description"/></p>
+        </div>
+            `,
+      setup() {
+        const value = ref("");
+        const description = ref("");
+
+        return { value, description };
+      },
+    });
+    app.component("my-component", {
+      template: `
+      <div>
+        <input type="text" :value="modelValue" @input="onInput"/>
+        <input type="text" :value="descriptionValue" @input="$emit('update:descriptionValue',$event.target.value)"/>
+        </div>
+        `,
+      props: ["modelValue", "descriptionValue", "modelModifiers"],
+      emits: ["update:modelValue", "update:descriptionValue"],
+      setup(props, content) {
+        const onInput = (e) => {
+          let value = e.target.value;
+          if (props.modelModifiers.capitalize) {
+            value = value.charAt(0).toUpperCase() + value.slice(1);
+          }
+          content.emit("update:modelValue", value);
+        };
+        return { onInput };
+      },
+    });
+    app.mount("#app");
+  </script>
+</html>

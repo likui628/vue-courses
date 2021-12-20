@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Async Components</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+      .demo {
+        font-family: sans-serif;
+        border: 1px solid #eee;
+        border-radius: 2px;
+        padding: 20px 30px;
+        margin-top: 1em;
+        margin-bottom: 40px;
+        user-select: none;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="demo"></div>
+  </body>
+  <script>
+    const { createApp, defineAsyncComponent } = Vue;
+
+    const App = {
+      template: `
+            <async-example></async-example>
+        `,
+    };
+    const app = createApp(App);
+
+    const LoadingComponent = {
+      template: `<div>Loading...</div>`,
+    };
+    const ErrorComponent = {
+      template: `<div>Error!!!</div>`,
+    };
+
+    const AsyncComp = defineAsyncComponent({
+      loader: () =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve({
+              template: "<div>I am async!</div>",
+            });
+          }, 2000);
+        }),
+      loadingComponent: LoadingComponent,
+      errorComponent: ErrorComponent,
+      delay: 200,
+    });
+
+    app.component("async-example", AsyncComp);
+    app.mount("#app");
+  </script>
+</html>

@@ -93,7 +93,20 @@ admins 123
 
 
 
-## API Calls with Axios
+## Data Fetching
+`useAsyncData`:
+
+```
+<script setup>
+const { data } = await useAsyncData('count',
+    () => $fetch('/api/count'))
+</script>
+```
+`useLazyAsyncData`: identically to `useAsyncData` with the `lazy: true`
+
+`useFetch`: wrapper around `useAsyncData` and `$fetch`.
+
+`useLazyFetch`:  identically to `useFetch` with the `lazy: true`
 
 ## Async/Await & Progress Bar
 

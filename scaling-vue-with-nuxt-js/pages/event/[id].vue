@@ -2,20 +2,57 @@
   <div>
     <Html>
       <Head>
-        <Title>Event {{ id }}</Title>
-        <Meta name="description" content="create an event" />
+        <Title>{{ event.title }}</Title>
+        <Meta name="description" :content="event.title + event.description" />
       </Head>
     </Html>
-    <h1>Event {{ id }}</h1>
+    
+    <div class="event-header">
+      <span class="eyebrow"> @{{ event.time }} on {{ event.date }} </span>
+      <h1 class="title">
+        {{ event.title }}
+      </h1>
+      <h5>Organized by {{ event.organizer ? event.organizer.name : "" }}</h5>
+      <h5>Category: {{ event.category }}</h5>
+    </div>
+
+    <span name="map">
+      <h2>Location</h2>
+    </span>
+
+    <address>{{ event.location }}</address>
+
+    <h2>Event details</h2>
+    <p>{{ event.description }}</p>
+
+    <h2>
+      Attendees
+      <span class="badge -fill-gradient">
+        {{ event.attendees ? event.attendees.length : 0 }}
+      </span>
+    </h2>
+    <ul class="list-group">
+      <li
+        v-for="(attendee, index) in event.attendees"
+        :key="index"
+        class="list-item"
+      >
+        <b>{{ attendee.name }}</b>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
-  computed: {
-    id() {
-      return this.$route.params.id;
-    },
+  async setup() {
+    const route = useRoute()
+
+    const { data: event } = await useFetch(
+      "http://localhost:3000/events/" + route.params.id
+    );
+
+    return { event };
   },
 };
 </script>

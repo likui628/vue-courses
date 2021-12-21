@@ -68,6 +68,31 @@ https://www.vuemastery.com/courses/scaling-vue-with-nuxt-js/
 
 ## File-based Routing
 
+Pages directory :
+
+```
+-| pages/
+---| index.vue
+---| users-[group]/
+-----| [id].vue
+```
+
+page `[id].vue`:
+
+```html
+<template>
+  {{ $route.params.group }}
+  {{ $route.params.id }}
+</template>
+```
+
+Navigating to /users-admins/123 would render:
+```
+admins 123
+```
+
+
+
 ## API Calls with Axios
 
 ## Async/Await & Progress Bar

@@ -108,7 +108,48 @@ const { data } = await useAsyncData('count',
 
 `useLazyFetch`:  identically to `useFetch` with the `lazy: true`
 
-## Async/Await & Progress Bar
+## Runtime Config
+`.env`
+```
+BASE_URL=https://nuxtjs.org
+API_SECRET=api_secret_token
+```
+
+`nuxt.config.ts`
+```js
+export default defineNuxtConfig({
+  publicRuntimeConfig: {
+    BASE_URL: process.env.BASE_URL
+  },
+  privateRuntimeConfig: {
+    API_SECRET: process.env.API_SECRET
+  }
+})
+```
+
+usage:
+
+1. virtual `#config`
+    ```js
+    import config from '#config'
+
+    export default async () => {
+    const result = await $fetch('https://my.api.com/test', {
+        headers: {
+        Authorization: `Bearer ${config.API_AUTH_TOKEN}`
+        }
+    })
+    return result
+    }
+    ```
+
+2. `useRuntimeConfig`
+
+    ```vue
+    <script setup>
+    const config = useRuntimeConfig()
+    </script>
+    ```
 
 ## Using Vuex
 

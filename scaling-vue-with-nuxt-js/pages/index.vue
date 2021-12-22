@@ -20,7 +20,8 @@ export default {
     EventCard,
   },
   async setup() {
-    const { data: events } = await useFetch("http://localhost:3000/events");
+    const config = useRuntimeConfig()
+    const { data: events } = await useFetch(config.BASE_URL+ "events");
 
     return { events };
   },

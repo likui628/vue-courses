@@ -1,7 +1,7 @@
 <template>
   <div>
     <Html>
-      <Head>
+      <Head v-if="event">
         <Title>{{ event.title }}</Title>
         <Meta name="description" :content="event.title + event.description" />
       </Head>
@@ -47,9 +47,10 @@
 export default {
   async setup() {
     const route = useRoute()
+    const config = useRuntimeConfig()
 
     const { data: event } = await useFetch(
-      "http://localhost:3000/events/" + route.params.id
+      `${ config.BASE_URL }events/${ route.params.id }`
     );
 
     return { event };

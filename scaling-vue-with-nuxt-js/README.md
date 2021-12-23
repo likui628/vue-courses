@@ -153,6 +153,11 @@ usage:
 
 ## Using Vuex
 
+[Global store support #571](https://github.com/nuxt/framework/discussions/571)
+1. Pinia (by @posva):[nuxt module](https://github.com/posva/pinia/tree/v2/packages/nuxt)
+2. Vuex and [Vuex@5 POC](https://github.com/kiaking/vuex-ideas) by @kiaking with [example nuxt 3 plugin](https://github.com/nuxt/framework/blob/c8f86914962bbbca900415aea26de95f71653059/packages/nuxt3/src/app/plugins/vuex.ts)
+3. [useState](https://v3.nuxtjs.org/docs/usage/state)
+
 ## Universal Mode Deployment
 
 ## Static Site Generated Deployment

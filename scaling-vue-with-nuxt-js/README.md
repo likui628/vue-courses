@@ -158,6 +158,15 @@ usage:
 2. Vuex and [Vuex@5 POC](https://github.com/kiaking/vuex-ideas) by @kiaking with [example nuxt 3 plugin](https://github.com/nuxt/framework/blob/c8f86914962bbbca900415aea26de95f71653059/packages/nuxt3/src/app/plugins/vuex.ts)
 3. [useState](https://v3.nuxtjs.org/docs/usage/state)
 
-## Universal Mode Deployment
+## Server directory
 
-## Static Site Generated Deployment
+`server/api/node.ts`: http://localhost:3000/api/node 
+
+```ts
+import type { IncomingMessage, ServerResponse } from 'http'
+
+export default async (req: IncomingMessage, res: ServerResponse) => {
+  res.statusCode = 200
+  res.end('Works!')
+}
+```
